@@ -1,0 +1,2 @@
+Hello from GitHub!
+这是我的第一个 Android App。
