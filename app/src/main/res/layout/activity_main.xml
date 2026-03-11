@@ -186,10 +186,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:columnCount="2"
-                            android:rowCount="5"
-                            android:useDefaultMargins="false"
-                            android:alignmentMode="alignMargins">
+                            android:columnCount="3"
+                            android:rowCount="3">
 
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/cardPartsReceiving"
@@ -197,7 +195,7 @@
                                 app:cardBackgroundColor="#EEF5FF">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_add" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Parts&#10;Receiving" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Parts Receiving" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
@@ -207,7 +205,7 @@
                                 app:cardBackgroundColor="#EEF9F1">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_upload" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Semivan&#10;Receiving" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Semivan Receiving" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
@@ -227,7 +225,7 @@
                                 app:cardBackgroundColor="#F2F0FF">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_crop" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Roof&#10;Line" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Roof Line" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
@@ -237,7 +235,7 @@
                                 app:cardBackgroundColor="#F0F7FF">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_manage" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Assemble&#10;Line" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Assemble Line" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
@@ -247,7 +245,7 @@
                                 app:cardBackgroundColor="#EAFBF6">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_info_details" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Quality&#10;Center" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Quality Center" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
@@ -257,7 +255,7 @@
                                 app:cardBackgroundColor="#FFF8E9">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_send" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Dispatching&#10;Area" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Dispatching Area" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
@@ -267,7 +265,7 @@
                                 app:cardBackgroundColor="#FFF0F6">
                                 <LinearLayout style="@style/AreaCardContentStyle">
                                     <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_directions" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Goods&#10;Issuing" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Goods Issuing" />
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
