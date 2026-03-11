@@ -13,6 +13,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         String packageName = InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName();
-        assertEquals("snowyriver.app", packageName);
+        assertEquals("com.example.githubdemoapp", packageName);
     }
 }
