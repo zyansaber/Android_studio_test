@@ -1,4 +1,4 @@
-package com.example.githubdemoapp;
+package snowyriver.app;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,6 +13,6 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         String packageName = InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName();
-        assertEquals("com.example.githubdemoapp", packageName);
+        assertEquals("snowyriver.app", packageName);
     }
 }
