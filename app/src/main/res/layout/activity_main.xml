@@ -195,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:columnCount="2"
-                            android:rowCount="6"
+                            android:rowCount="5"
                             android:useDefaultMargins="false"
                             android:alignmentMode="alignMargins">
 
@@ -289,67 +289,7 @@
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/cardPredeliveryWarranty"
-                                style="@style/AreaCardStyle"
-                                app:cardBackgroundColor="#EAF4FF">
-                                <LinearLayout style="@style/AreaCardContentStyle">
-                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_camera" />
-                                    <TextView style="@style/AreaTextStyle" android:text="Predelivery&#10;Warranty" />
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
-
                         </GridLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/predeliveryWarrantyFormLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="18dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="18dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Predelivery Warranty"
-                            android:textColor="@color/brand_dark"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:hint="Detail">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/predeliveryDetailInput"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textMultiLine"
-                                android:minLines="2" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/predeliveryTakePhotoButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="Take Photo &amp; Upload"
-                            app:icon="@android:drawable/ic_menu_camera"
-                            app:cornerRadius="12dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
