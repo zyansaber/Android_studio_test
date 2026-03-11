@@ -20,14 +20,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="18dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/loginCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="6dp">
+                app:cardCornerRadius="22dp"
+                app:cardElevation="8dp"
+                app:strokeColor="@color/brand_200"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -40,21 +42,22 @@
                         android:layout_height="wrap_content"
                         android:text="YardStock Pro"
                         android:textColor="@color/brand_dark"
-                        android:textSize="28sp"
+                        android:textSize="30sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="收货扫描系统 · 安全登录"
-                        android:textColor="#666666" />
+                        android:text="Enterprise Inventory & Receiving Platform"
+                        android:textColor="#5F6B7A"
+                        android:textSize="14sp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="用户名（可随意）">
+                        android:layout_marginTop="20dp"
+                        android:hint="Username (any value)">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/usernameInput"
@@ -67,7 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="密码（admin）"
+                        android:hint="Password (admin)"
                         app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -82,7 +85,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="登录系统"
+                        android:backgroundTint="@color/brand"
+                        android:text="Sign In"
+                        android:textColor="@android:color/white"
                         app:cornerRadius="12dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -91,14 +96,15 @@
                 android:id="@+id/dashboardLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="14dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="18dp">
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="6dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -110,7 +116,7 @@
                             android:id="@+id/welcomeText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="欢迎，操作员"
+                            android:text="Welcome, Operator"
                             android:textColor="@color/brand_dark"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -120,29 +126,160 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="状态：等待激光扫码"
+                            android:text="Status: Please choose a work area"
                             android:textColor="#5A5A5A"
-                            android:textSize="16sp" />
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/selectedSectionText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Current Area: Not selected"
+                            android:textColor="@color/brand"
+                            android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/scanButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="准备激光扫码"
+                            android:layout_marginTop="14dp"
+                            android:backgroundTint="@color/brand_dark"
+                            android:text="Arm Laser Scanner"
+                            android:textColor="@android:color/white"
                             app:cornerRadius="12dp"
                             app:icon="@android:drawable/ic_menu_search" />
 
                         <EditText
                             android:id="@+id/laserInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@android:color/transparent"
-                            android:hint="激光扫描输入（扫码枪会自动填写）"
+                            android:layout_width="1dp"
+                            android:layout_height="1dp"
+                            android:alpha="0"
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:singleLine="true" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Work Areas"
+                            android:textColor="@color/brand_dark"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:columnCount="3"
+                            android:rowCount="3">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardPartsReceiving"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#EEF5FF">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_add" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Parts Receiving" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardSemivanReceiving"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#EEF9F1">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_upload" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Semivan Receiving" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardHoist"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#FFF4EA">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_compass" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Hoist" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardRoofLine"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#F2F0FF">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_crop" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Roof Line" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardAssembleLine"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#F0F7FF">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_manage" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Assemble Line" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardQualityCenter"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#EAFBF6">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_info_details" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Quality Center" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardDispatching"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#FFF8E9">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_send" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Dispatching Area" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardGoodsIssuing"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#FFF0F6">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_directions" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Goods Issuing" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cardStocktaking"
+                                style="@style/AreaCardStyle"
+                                app:cardBackgroundColor="#EDF3FF">
+                                <LinearLayout style="@style/AreaCardContentStyle">
+                                    <ImageView style="@style/AreaIconStyle" android:src="@android:drawable/ic_menu_agenda" />
+                                    <TextView style="@style/AreaTextStyle" android:text="Stocktaking" />
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </GridLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -161,7 +298,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="最近一次扫码"
+                            android:text="Last Scanned Barcode"
                             android:textColor="#777777"
                             android:textSize="14sp" />
 
@@ -172,7 +309,7 @@
                             android:layout_marginTop="8dp"
                             android:text="--"
                             android:textColor="@color/brand_dark"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -180,7 +317,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="类型：--"
+                            android:text="Type: --"
                             android:textColor="#5A5A5A" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
