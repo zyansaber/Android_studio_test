@@ -1,11 +1,6 @@
 package com.example.githubdemoapp;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -17,10 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -29,11 +21,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,62 +50,20 @@ public class MainActivity extends AppCompatActivity {
     private TextView barcodeText;
     private TextView barcodeTypeText;
     private EditText laserInput;
-    private View predeliveryWarrantyFormLayout;
-    private TextInputEditText predeliveryDetailInput;
-    private MaterialButton predeliveryTakePhotoButton;
 
     private String currentUser = "";
     private String selectedSection = "";
-    private String lastScannedBarcode = "";
     private DatabaseReference scansRef;
-    private DatabaseReference predeliveryWarrantyRef;
-    private StorageReference predeliveryStorageRef;
-
-    private ActivityResultLauncher<String> cameraPermissionLauncher;
-    private ActivityResultLauncher<Intent> cameraLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setupResultLaunchers();
         bindViews();
         initFirebaseRealtimeDb();
         setupActions();
         loadRememberedCredentials();
-    }
-
-    private void setupResultLaunchers() {
-        cameraPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
-                    if (isGranted) {
-                        openCamera();
-                    } else {
-                        Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-
-        cameraLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() != RESULT_OK || result.getData() == null) {
-                        statusText.setText("Status: Camera cancelled");
-                        return;
-                    }
-
-                    Bundle extras = result.getData().getExtras();
-                    if (extras == null || !(extras.get("data") instanceof Bitmap)) {
-                        statusText.setText("Status: No photo captured");
-                        return;
-                    }
-
-                    Bitmap bitmap = (Bitmap) extras.get("data");
-                    uploadPredeliveryWarrantyPhoto(bitmap);
-                }
-        );
     }
 
     private void bindViews() {
@@ -134,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
         barcodeText = findViewById(R.id.barcodeText);
         barcodeTypeText = findViewById(R.id.barcodeTypeText);
         laserInput = findViewById(R.id.laserInput);
-        predeliveryWarrantyFormLayout = findViewById(R.id.predeliveryWarrantyFormLayout);
-        predeliveryDetailInput = findViewById(R.id.predeliveryDetailInput);
-        predeliveryTakePhotoButton = findViewById(R.id.predeliveryTakePhotoButton);
 
         bindSectionCard(R.id.cardPartsReceiving, "Parts Receiving");
         bindSectionCard(R.id.cardSemivanReceiving, "Semivan Receiving");
@@ -147,15 +90,6 @@ public class MainActivity extends AppCompatActivity {
         bindSectionCard(R.id.cardDispatching, "Dispatching Area");
         bindSectionCard(R.id.cardGoodsIssuing, "Goods Issuing");
         bindSectionCard(R.id.cardStocktaking, "Stocktaking");
-
-        MaterialCardView predeliveryCard = findViewById(R.id.cardPredeliveryWarranty);
-        predeliveryCard.setOnClickListener(v -> {
-            selectedSection = "Predelivery Warranty";
-            selectedSectionText.setText("Current Area: " + selectedSection);
-            statusText.setText("Status: Fill detail and take photo for scanned barcode.");
-            predeliveryWarrantyFormLayout.setVisibility(View.VISIBLE);
-            armLaserScannerInput();
-        });
     }
 
     private void bindSectionCard(int cardId, String sectionName) {
@@ -164,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             selectedSection = sectionName;
             selectedSectionText.setText("Current Area: " + selectedSection);
             statusText.setText("Status: " + selectedSection + " selected. Ready to scan.");
-            predeliveryWarrantyFormLayout.setVisibility(View.GONE);
             Toast.makeText(this, sectionName + " selected", Toast.LENGTH_SHORT).show();
             armLaserScannerInput();
         });
@@ -173,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupActions() {
         loginButton.setOnClickListener(v -> doLogin());
         scanButton.setOnClickListener(v -> armLaserScannerInput());
-        predeliveryTakePhotoButton.setOnClickListener(v -> validateAndStartCamera());
 
         laserInput.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -200,39 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void validateAndStartCamera() {
-        if (!"Predelivery Warranty".equals(selectedSection)) {
-            Toast.makeText(this, "Please select Predelivery Warranty first", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(lastScannedBarcode)) {
-            Toast.makeText(this, "Please scan barcode first", Toast.LENGTH_SHORT).show();
-            armLaserScannerInput();
-            return;
-        }
-
-        if (TextUtils.isEmpty(getInputText(predeliveryDetailInput))) {
-            Toast.makeText(this, "Please fill detail before taking photo", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            openCamera();
-        } else {
-            cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
-        }
-    }
-
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            cameraLauncher.launch(cameraIntent);
-        } else {
-            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void doLogin() {
@@ -302,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        lastScannedBarcode = barcodeValue;
         barcodeText.setText(barcodeValue);
         barcodeTypeText.setText("Type: Laser/Wedge");
         statusText.setText("Status: Scan captured. Uploading to Firebase...");
@@ -338,65 +236,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void uploadPredeliveryWarrantyPhoto(Bitmap bitmap) {
-        if (predeliveryStorageRef == null || predeliveryWarrantyRef == null) {
-            statusText.setText("Status: Firebase storage not initialized");
-            Toast.makeText(this, "Firebase storage not initialized", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String detail = getInputText(predeliveryDetailInput);
-        String safeBarcode = lastScannedBarcode.replaceAll("[^a-zA-Z0-9_-]", "_");
-        String fileName = "PW_" + System.currentTimeMillis() + ".jpg";
-        String storagePath = "predelivery_warranty/" + safeBarcode + "/" + fileName;
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-        byte[] imageBytes = baos.toByteArray();
-
-        StorageMetadata metadata = new StorageMetadata.Builder()
-                .setContentType("image/jpeg")
-                .setCustomMetadata("barcode", lastScannedBarcode)
-                .setCustomMetadata("detail", detail)
-                .setCustomMetadata("username", currentUser)
-                .build();
-
-        statusText.setText("Status: Uploading Predelivery Warranty photo...");
-
-        StorageReference photoRef = predeliveryStorageRef.child(storagePath);
-        photoRef.putBytes(imageBytes, metadata)
-                .addOnSuccessListener(taskSnapshot -> photoRef.getDownloadUrl()
-                        .addOnSuccessListener(uri -> savePredeliveryRecord(detail, storagePath, uri.toString()))
-                        .addOnFailureListener(e -> savePredeliveryRecord(detail, storagePath, "")))
-                .addOnFailureListener(e -> {
-                    statusText.setText("Status: Predelivery upload failed - " + e.getMessage());
-                    Toast.makeText(this, "Photo upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
-    }
-
-    private void savePredeliveryRecord(String detail, String storagePath, String downloadUrl) {
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("username", currentUser);
-        payload.put("workArea", selectedSection);
-        payload.put("barcode", lastScannedBarcode);
-        payload.put("detail", detail);
-        payload.put("photoPath", "gs://yardstock.firebasestorage.app/" + storagePath);
-        payload.put("downloadUrl", downloadUrl);
-        payload.put("timestamp", timestamp);
-
-        predeliveryWarrantyRef.push().setValue(payload)
-                .addOnSuccessListener(unused -> {
-                    statusText.setText("Status: Predelivery Warranty uploaded ✅");
-                    Toast.makeText(this, "Predelivery warranty saved", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    statusText.setText("Status: Record save failed - " + e.getMessage());
-                    Toast.makeText(this, "Record save failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
-    }
-
     private void initFirebaseRealtimeDb() {
         try {
             if (FirebaseApp.getApps(this).isEmpty()) {
@@ -412,8 +251,6 @@ public class MainActivity extends AppCompatActivity {
 
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://yardstock-default-rtdb.asia-southeast1.firebasedatabase.app");
             scansRef = database.getReference("receiving_scans");
-            predeliveryWarrantyRef = database.getReference("predelivery_warranty_records");
-            predeliveryStorageRef = FirebaseStorage.getInstance().getReference();
         } catch (Exception e) {
             Toast.makeText(this, "Firebase init exception: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }

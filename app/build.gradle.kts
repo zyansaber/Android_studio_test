@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "snowyriver.app"
+    namespace = "com.example.githubdemoapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "snowyriver.app"
+        applicationId = "com.example.githubdemoapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -41,7 +41,6 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-database")
-    implementation("com.google.firebase:firebase-storage")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
