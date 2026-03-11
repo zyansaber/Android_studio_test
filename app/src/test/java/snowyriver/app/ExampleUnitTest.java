@@ -1,4 +1,4 @@
-package com.example.githubdemoapp;
+package snowyriver.app;
 
 import org.junit.Test;
 
