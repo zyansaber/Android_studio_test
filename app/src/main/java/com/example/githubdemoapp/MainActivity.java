@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,16 +30,11 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private static final String ADMIN_PASSWORD = "admin";
-    private static final String PREFS_NAME = "login_prefs";
-    private static final String KEY_REMEMBER = "remember_me";
-    private static final String KEY_USERNAME = "saved_username";
-    private static final String KEY_PASSWORD = "saved_password";
 
     private TextInputEditText usernameInput;
     private TextInputEditText passwordInput;
     private MaterialButton loginButton;
     private MaterialButton scanButton;
-    private CheckBox rememberMeCheckBox;
     private LinearLayout dashboardLayout;
     private View loginCard;
 
@@ -63,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         bindViews();
         initFirebaseRealtimeDb();
         setupActions();
-        loadRememberedCredentials();
     }
 
     private void bindViews() {
@@ -71,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
         scanButton = findViewById(R.id.scanButton);
-        rememberMeCheckBox = findViewById(R.id.rememberMeCheckBox);
         dashboardLayout = findViewById(R.id.dashboardLayout);
         loginCard = findViewById(R.id.loginCard);
         welcomeText = findViewById(R.id.welcomeText);
@@ -147,41 +139,12 @@ public class MainActivity extends AppCompatActivity {
             username = "operator_" + System.currentTimeMillis() % 10000;
         }
 
-        saveLoginPreference(username, password);
-
         currentUser = username;
         welcomeText.setText("Welcome, " + currentUser);
         statusText.setText("Status: Login successful. Select a work area.");
 
         loginCard.setVisibility(View.GONE);
         dashboardLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void saveLoginPreference(String username, String password) {
-        boolean shouldRemember = rememberMeCheckBox.isChecked();
-        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .edit()
-                .putBoolean(KEY_REMEMBER, shouldRemember)
-                .putString(KEY_USERNAME, shouldRemember ? username : "")
-                .putString(KEY_PASSWORD, shouldRemember ? password : "")
-                .apply();
-    }
-
-    private void loadRememberedCredentials() {
-        boolean remember = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .getBoolean(KEY_REMEMBER, false);
-        rememberMeCheckBox.setChecked(remember);
-        if (!remember) {
-            return;
-        }
-
-        String savedUsername = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .getString(KEY_USERNAME, "");
-        String savedPassword = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .getString(KEY_PASSWORD, "");
-
-        usernameInput.setText(savedUsername);
-        passwordInput.setText(savedPassword);
     }
 
     private void armLaserScannerInput() {
